@@ -55,7 +55,7 @@ class RouteDAO:
     # reading data from a database
     def get_all_routes(self):
         mycursor = self.get_cursor()
-        sql = "Select * from routes_table"
+        sql = "Select * from routes_table Order by destination, id" # this will select all records from the routes_table and order them by id in ascending order, so that the records are returned in the order they were inserted into the database.
         
         mycursor.execute(sql) 
         results = mycursor.fetchall() # this will return all records from the database as a list of tuples, where each tuple represents a record. If no records are found, it will return an empty list.
@@ -108,7 +108,7 @@ class RouteDAO:
     def update_route(self, id, route):
         route_to_be_updated= self.find_route_by_id(id)
         mycursor = self.get_cursor()
-        sql = "Update routes_table set destination = %s, route_map = %s, distance = %s, elevation = %s, where id = %s"
+        sql = "Update routes_table set destination = %s, route_map = %s, distance = %s, elevation = %s where id = %s"
         values = (route.get("destination"), route.get("route_map"), route.get("distance"),route.get("elevation"),id) # use .get(" ")to get the title, author, and price out of the dictionary object. If not set, get will return None
         
         mycursor.execute(sql, values) # this passes the sql string and the values tuple to the execute function

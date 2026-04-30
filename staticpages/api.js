@@ -41,7 +41,7 @@ function _displayfindroute(data) {
 
   data.forEach(item => {
     let searchButton = document.createElement("a"); // create a button element to be used for the search button in the table
-    searchButton.href = "#findRouteModal"; // set the href attribute of the search button to the id of the modal that will be used to display the search results
+    searchButton.href = "#searchRouteModal"; // set the href attribute of the search button to the id of the modal that will be used to display the search results
     searchButton.className = "search"; // set the class name of the search button to "search" for styling purposes
     searchButton.setAttribute("onclick", `findRouteForm(${item.id})`); // set the onclick attribute of the search button to call the findRouteForm function with the id of the route item as an argument when the button is clicked
     searchButton.setAttribute("data-toggle", "modal"); // set the data-toggle attribute of the search button to "modal" to enable the modal functionality
@@ -117,24 +117,27 @@ function displayEditForm(id) {
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = item.route_map;
   const linkElement = tempDiv.querySelector('a');
-  document.getElementById("edit-route-map").value = linkElement ? linkElement.getAttribute('href') : item.route_map;
+  document.getElementById("edit-route-map").value = linkElement ? linkElement.getAttribute('href') : item.route_map; 
 
   document.getElementById("edit-distance").value = item.distance;
   document.getElementById("edit-elevation").value = item.elevation;
 }
 
 function updateRoute() {
-  const idElement = document.getElementById("edit-id");
-  const itemId = idElement ? idElement.value : "";
+  //const idElement = document.getElementById("edit-id");
+  //const itemId = idElement ? idElement.value : "";
+  const itemId = document.getElementById("edit-id").value.trim();
 
   if (!itemId) {
-    console.error("No ID found for update");
+   console.error("No ID found for update");
     return false;
   }
 
   const item = {
+    id: parseInt(document.getElementById("edit-id").value.trim()),
     destination: document.getElementById("edit-destination").value.trim(),
     route_map: `<a href="${document.getElementById("edit-route-map").value.trim()}" target="_blank">${document.getElementById("edit-route-map").value.trim()}</a>`,
+    //route_map: document.getElementById("edit-route-map").value.trim(),
     distance: parseFloat(document.getElementById("edit-distance").value.trim()),
     elevation: parseFloat(document.getElementById("edit-elevation").value.trim())
   };
@@ -203,7 +206,7 @@ function _displayRoutes(data) {
     td2.appendChild(textDestination); // add the destination to the second column of the table
 
     let td3 = tr.insertCell(2);
-    let textRoute_map = document.createTextNode(item.route_map);
+    //let textRoute_map = document.createTextNode(item.route_map);
     td3.innerHTML = item.route_map; // add the route map to the third column of the table, using innerHTML to render the link
     
     let td4 = tr.insertCell(3);

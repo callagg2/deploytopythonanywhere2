@@ -1,5 +1,5 @@
 import mysql.connector
-from streamlit import table
+# from streamlit import table
 from testing_dbconfig import config_details
 
 
@@ -152,7 +152,7 @@ def show_all_in_table():
           )
     try:
         sql0 = "Use routes_db"
-        sql1 = "SELECT * from routes_table"
+        sql1 = "SELECT * from routes_table ORDER BY id"
         cursor = connection.cursor()
         cursor.execute(sql0)
         cursor.execute(sql1)
@@ -175,8 +175,9 @@ def find_one_record_in_table():
           )
     try:
         sql0 = "Use routes_db"
-        sql1 = "SELECT * from routes_table where id = 1"
-        # just using number 1 for testing because I know it doesn't exist
+        sql1 = "SELECT * from routes_table where id = 5"
+        #sql1 = "SELECT * from routes_table where destination like '%Glencree%'"
+        # just using number 5 for testing because I know it doesn't exist
         cursor = connection.cursor()
         cursor.execute(sql0)
         cursor.execute(sql1)
@@ -184,13 +185,40 @@ def find_one_record_in_table():
         if record:
             print(record)
         else:
-            print("Route with ID: 1 not found")
+            print("Route with ID: 5 not found")
     except mysql.connector.errors.InternalError as e:
-            print("\nID: 1 doesn't exist, error:", {e})   
+            print("\nID: 5 doesn't exist, error:", {e})   
     except mysql.connector.errors.DatabaseError as e:
-        print(f"\nError: Record does not exist or error occurred for id: 1 {e}")
+        print(f"\nError: Record does not exist or error occurred for id: 5 {e}")
     except mysql.connector.errors.IntegrityError as e:
-            print("\nID: 1 is not valid, it must be an integer, error:", {e})
+            print("\nID: 5 is not valid, it must be an integer, error:", {e})
+    except Exception as e:
+            print("error", {e})
+    cursor.close()
+    connection.close()
+
+# this function will show the content of a table that exists, this is useful for testing
+def update_record_in_table():
+    connection = mysql.connector.connect(
+        host = config_details['host'],
+        user = config_details['user'],
+        password = config_details['password']   
+          )
+    try:
+        sql0 = "Use routes_db"
+        sql1 = "UPDATE routes_table SET destination = 'Updated Destination', route_map = 'Updated Route Map', distance = 150.0, elevation = 1000.0 WHERE id = '5'"
+        # just using number 5 for testing because I know it doesn't exist
+        cursor = connection.cursor()
+        cursor.execute(sql0)
+        cursor.execute(sql1)
+        connection.commit()
+        print("Route with ID: 5 updated")
+    except mysql.connector.errors.InternalError as e:
+            print("\nID: 5 doesn't exist, error:", {e})   
+    except mysql.connector.errors.DatabaseError as e:
+        print(f"\nError: Record does not exist or error occurred for id: 5 {e}")
+    except mysql.connector.errors.IntegrityError as e:
+            print("\nID: 5 is not valid, it must be an integer, error:", {e})
     except Exception as e:
             print("error", {e})
     cursor.close()
@@ -251,6 +279,7 @@ if __name__ == "__main__":
 #    describe_tables()
 #   add_content_to_table()
 #   show_all_in_table()
-    find_one_record_in_table()
+   find_one_record_in_table()
+#   update_record_in_table()
 #   drop_table()
 #   drop_database()

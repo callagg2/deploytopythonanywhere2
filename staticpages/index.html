@@ -38,7 +38,7 @@
             <div class="table-title d-flex justify-content-between align-items-center">
               <h2>Cycle <b>Routes</b></h2>
             </div>
-                     <button class="btn btn-info" data-toggle="modal" data-target="#findRouteModal">
+                     <button class="btn btn-info" data-toggle="modal" data-target="#searchRouteModal">
                       <i class="material-icons">&#xE8B6;</i> <span>Search</span>
                      </button>
 
@@ -73,7 +73,7 @@
       </div>
     </div>
 <!-- Find a route HTML -->
-          <div id="findRouteModal" class="modal fade">
+          <div id="searchRouteModal" class="modal fade">
             <div class="modal-dialog">
               <div class="modal-content">
                 <form onsubmit="return getOneRoute()">
@@ -339,6 +339,10 @@
       $("#addRouteModal").submit(function() {
         $("#addRouteModal").modal("hide");
       });
+
+        $("#editRouteModal").submit(function() {
+          $("#editRouteModal").modal("hide");
+        });
 
       $("#deleteRouteModal").submit(function() {
         $("#deleteRouteModal").modal("hide");
