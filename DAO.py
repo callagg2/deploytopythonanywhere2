@@ -1,10 +1,10 @@
 # a simple DAO for a database that does CRUD operations on a cycling routes table
 #author: Gerry Callaghan
 
-#from matplotlib.pylab import record
 import mysql.connector
-from testing_dbconfig import config_details
-#from dbconfig_pythonanywhere import config_details
+import urllib.parse # this might be needed to parse the strava URL 
+#from testing_dbconfig import config_details
+from dbconfig_pythonanywhere import config_details
 
 
 class RouteDAO:

@@ -2,6 +2,8 @@ const url = "/routes";
 let routes = [];
 
 function getAllRoutes() {
+  // Fetch() allows you to send and receive data from a server asynchronously without reloading the page thereby performing AJAX (Asynchronous JavaScript and XML) operations
+  // it is the modern standard built into browsers and therefore generally preferred over older jQuery AJAX methods (Gemini).
   fetch(url)
     .then(response => response.json())
     .then(data => _displayRoutes(data))
@@ -9,22 +11,35 @@ function getAllRoutes() {
 }
 
 function getOneRoute() {
-  const id = document.getElementById("search-id").value.trim();
+  const idInput = document.getElementById("search-id");
+  const id = idInput.value.trim();
 
   fetch(`${url}/${id}`)
     .then(response => {
-      if (!response.ok) {
-        throw new Error("Route not found");
-      }
+      if (!response.ok) throw new Error("Route not found"); 
       return response.json();
     })
     .then(data => {
-      _displayRoutes([data]); // show the route found
-       $('#searchRouteModal').modal('hide');   // auto-close the modal
+      _displayRoutes([data]);
+      $('#searchRouteModal').modal('hide'); // Close search on success
     })
-    .catch(error => console.error("Unable to find that route.", error));
+    .catch(error => {
+      console.error("Unable to find that route.", error);
+      
+      // Update error text[cite: 1]
+      document.getElementById("error-message-text").innerText = `A route with ID "${id}" does not exist.`;
+      
+      // 1. Hide the search modal first so it doesn't overlap awkwardly
+      $('#searchRouteModal').modal('hide');
+      
+      // 2. Show the error modal
+      $('#searchErrorModal').modal('show');
 
-  return false; // prevent form reload
+      // 3. Prepare the search box for the next attempt
+      idInput.value = "";
+    });
+
+  return false; // Prevent form reload[cite: 1]
 }
 
 function findRouteForm(id) {
@@ -96,6 +111,7 @@ $('#addRouteModal').on('show.bs.modal', function () {
 
 function deleteRoute() {
   const itemId = document.getElementById("delete-id").value.trim();
+
   fetch(`${url}/${itemId}`, {
     method: "DELETE"
   })

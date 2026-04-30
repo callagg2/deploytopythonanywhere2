@@ -14,8 +14,8 @@ app = Flask(__name__,static_url_path="", static_folder="staticpages")
     # When you are at the root URL ("/"), the function index() is called.
 @app.route("/", methods=["GET"]) # this is just some onscreen message that is used to map the URL "/" to the function index() and specify that it should only respond to GET requests.
 def index():
-    return "Welcome to the REST API server!"
-
+    # This sends the user to the home page - index.html
+    return app.send_static_file("index.html")
 
     # To retrieve or get all the routes on the server
 @app.route("/routes", methods=["GET"]) # I'm mapping the URL "/routes" to the function get_all_routes() and specifying that it should only respond to GET requests. 
@@ -120,6 +120,14 @@ def delete_route(id):
     # The url_for("index") function generates the URL for the index() function, which is mapped to the root URL ("/"). So when a user accesses "/invalid", they will be redirected to "/".
 def revert_to_index():
     return redirect(url_for("index")) # this will redirect the user to the index (home) page when they access the /invalid endpoint
+
+
+@app.errorhandler(404)
+    # This is a custom error handler for 404 errors (page not found). When a user tries to access a URL that does not exist on the server, this function will be called. 
+    # It will redirect the user back to the index page instead of showing a 404 error message
+def page_not_found(e):
+    # This captures any invalid URL and sends the user back to the index
+    return redirect(url_for("index"))
 
 
 # this is to run the flask app, the debug=True parameter is used to enable debug mode, 
