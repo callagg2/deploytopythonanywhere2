@@ -1,5 +1,6 @@
-
-# author: gerry Callaghan
+# this is just used in production for testing the endpoints
+# author: Gerry Callaghan
+# student number G00472971
 
 from DAO import routeDAO
 import mysql.connector

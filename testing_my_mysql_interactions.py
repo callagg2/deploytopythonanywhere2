@@ -1,3 +1,7 @@
+# I have used this for interacting with the SQL database on both localhost and pythonanywhere
+# author: Gerry Callaghan
+# student number G00472971
+
 import mysql.connector
 # from streamlit import table
 from testing_dbconfig import config_details
@@ -130,7 +134,7 @@ def add_content_to_table():
           )
     try:
         sql0 = "Use routes_db"
-        sql1 = "INSERT INTO routes_table (destination, route_map, distance, elevation) VALUES ('Test Destination', 'Test Route Map', 130.0, 900.0)"
+        sql1 = "INSERT INTO routes_table (destination, route_map, distance, elevation) VALUES ('Arklow', 'https://www.strava.com/routes/2947924888565683470', 149.13, 1337.0)"
         cursor = connection.cursor()
         cursor.execute(sql0)
         cursor.execute(sql1)
@@ -274,12 +278,12 @@ def drop_database():
 if __name__ == "__main__":
 #   create_database()
 #   create_table()
-#   show_databases()
+   show_databases()
 #   show_tables()
 #    describe_tables()
 #   add_content_to_table()
 #   show_all_in_table()
-   find_one_record_in_table()
+#   find_one_record_in_table()
 #   update_record_in_table()
 #   drop_table()
 #   drop_database()

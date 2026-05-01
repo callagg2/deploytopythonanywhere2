@@ -91,18 +91,18 @@ def deleteroute(id):
 
 if __name__ == "__main__":
 
-    url = "https://andrewbeatty1.pythonanywhere.com/books"
-    id = 1728
-    newbook = {
-        'author': 'Joe Smith', 
-        'id': 1677, 
-        'price': 20, 
-        'title': 'New Book'
+    url = "https://callagg2.pythonanywhere.com/routes"
+    id = 9
+    newroute = {
+        'destination': 'Delphin', 
+        'map_route': 'https://www.strava.com/routes/3399412592025466984', 
+        'distance': 20, 
+        'elevation': 300
         }
-    bookdiff = {
-        'author': 'Mary-Jane Doe', 
-        'price': 14, 
-        'title': 'Yet Another Book'
+    routediff = {
+        'destination': 'Tuam', 
+        'distance': 14, 
+        'elevation': '215'
         }
 
     #print(readroutes())

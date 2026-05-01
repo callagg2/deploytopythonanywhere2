@@ -1,8 +1,4 @@
-
-
-
-
-
+# this can be ignore, it's just some of the interactions with Copilot
 
 
 Today

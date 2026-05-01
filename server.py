@@ -1,4 +1,6 @@
+# A simple Flask API server that will allow CRUD operations
 # author: Gerry Callaghan
+# student number G00472971
 
 from flask import Flask, request, jsonify, redirect, url_for, abort 
 from DAO import routeDAO
@@ -11,45 +13,44 @@ from DAO import routeDAO
     # are in a folder called "staticpages" and can be accessed at the root URL ("/").
 app = Flask(__name__,static_url_path="", static_folder="staticpages")
 
+
     # When you are at the root URL ("/"), the function index() is called.
-@app.route("/", methods=["GET"]) # this is just some onscreen message that is used to map the URL "/" to the function index() and specify that it should only respond to GET requests.
+@app.route("/", methods=["GET"]) 
 def index():
-    # This sends the user to the home page - index.html
-    return app.send_static_file("index.html")
+    return app.send_static_file("index.html") # This sends the user to the home page - index.html
 
-    # To retrieve or get all the routes on the server
-@app.route("/routes", methods=["GET"]) # I'm mapping the URL "/routes" to the function get_all_routes() and specifying that it should only respond to GET requests. 
-    # When a client sends a GET request to "/routes", the get_all_routes() function queries a database to retrieve the list of routes 
-    # and returns that data in the JSON response.
+    # To get all the routes from the database, map the URL "/routes" to the function get_all_routes() and specify that it should only respond to GET requests
+@app.route("/routes", methods=["GET"]) # I'm . 
+    
 def get_all_routes():
-    #return jsonify({"message": "List of routes"}) # used only for testing the endpoint
+    #return jsonify({"message": "List of routes"}) # this is used only for testing the endpoint in production
     # I can use either Postman (GET request) or run the curl command: "curl http://127.0.0.1:5000/routes" to test this endpoint "/routes"
-    return jsonify(routeDAO.get_all_routes())
+    return jsonify(routeDAO.get_all_routes()) # we jsonify the dict object returned via the DAO
 
 
-    # To find a specific record by passing in its id
-@app.route("/routes/<int:id>", methods=["GET"]) # I'm mapping the URL "/routes/<int:id>" to the function find_route_by_id() 
-    # and specifying that it should only respond to GET requests. The <int:id> part of the URL is a variable that will be passed to the function as an argument. 
-    # When a client sends a GET request to "/routes/1", for example, 
-    # the find_route_by_id() function will be called with id set to 1. 
+    # To find a specific record by passing in its id, map the URL "/routes/<int:id>" to this function and specify it should only respond to GET requests.
+@app.route("/routes/<int:id>", methods=["GET"]) 
+     
     # Here, the function queries the database and retrieves the details for the route with the specified ID and return that data in the JSON response.
 def find_route_by_id(id):
     #return jsonify(f"Details for route with ID {id}") # used only for testing the endpoint
-    # I can use either Postman (GET request) or run the curl command: "curl http://127.0.0.1:5000/routes/1" to test this endpoint "/routes"
+    # I can use either Postman (GET request) or run the curl command: "curl http://127.0.0.1:5000/routes/1" to test this endpoint "/routes/1" where 1 is route 1.
 
-    route = jsonify(routeDAO.find_route_by_id(id)) # this will call the find_route_by_id() function
-    if route:
+    route = jsonify(routeDAO.find_route_by_id(id)) # this assigns the jsonified dict object to a variable route
+
+    if route: # if one exists
         return route
     else:
-        return jsonify({"message": f"Route with ID {id} not found"}), 404 # this will return a JSON response with a message indicating that the route was not found, and a 404 status code to indicate that the resource was not found.   
+        return jsonify({"message": f"Route with ID {id} not found"}), 404 # this will return a JSON response with a message indicating that the route was not found, 
+        # and a 404 status code to indicate that the resource was not found.   
 
 
-    # To create a new record on the server
-@app.route("/routes", methods=["POST"]) # I'm mapping the URL "/routes" to the function create_route() 
-    #and specifying that it should only respond to POST requests. 
+    # To create a new route in the database, map the URL "/routes" to the function create_route() and specify that it should only respond to POST requests. 
+@app.route("/routes", methods=["POST"]) 
+    
+
 def create_route():
-    jsonstring = request.json  # this is the data that is to be sent up to my server in the body of the request, 
-    # it will be a JSON string contains the information for the new record
+    jsonstring = request.json  # this is the JSON string contains the information to be sent up to my server in the body of the request, 
     
     # Because it's possible that not all fields are provided, I'm checking for that and return an error if necessary
     # perhaps put the following code in a separate function to validate the input and return an error message if any required fields are missing
@@ -73,18 +74,19 @@ def create_route():
         abort(409)
     route["elevation"] = jsonstring["elevation"]
     
-    #return jsonify({"message": "Route created", "data": jsonstring})
+    #return jsonify({"message": "Route created", "data": jsonstring}) # this is for testing in production
     # I can use either Postman (POST request) or run the curl command: "curl -X POST -d "{\"destination\":\"Sallygap\", \"route_map\":\"some map\",\"distance\":110,,\"elevation\":800}" http://127.0.0.1:5000/routes" to test this endpoint "/routes"
 
     return jsonify(routeDAO.create_route(route))
 
-    # To update a route on the server
-@app.route("/routes/<int:id>", methods=["PUT"]) # I'm mapping the URL "/routes/<int:id>" to the function update_route() 
-    # and specifying that it should only respond to PUT requests. The <int:id> part of the URL is a variable that will be passed to the function as an argument. 
-    # When a client sends a PUT request to "/routes/1", the update_route() function will be called with id set to 1. 
+
+    # To update/edit a route on the database, map the URL "/routes/<int:id>" to the function update_route() and specify it should only respond to PUT requests.
+@app.route("/routes/<int:id>", methods=["PUT"]) # I'm 
+    
 def update_route(id):
     jsonstring = request.json # this is the data that is sent in the body of the request, it will be a JSON string that contains the updated information
     route = {}
+    # unlike in the case for a NEW route where every field should be filled, here only new information is needed, we can leave fields as they are 
     if "destination" in jsonstring:
         route["destination"] = jsonstring["destination"]
 
@@ -97,36 +99,32 @@ def update_route(id):
     if "elevation" in jsonstring:
         route["elevation"] = jsonstring["elevation"]
 
-    #return f"update {id} {jsonstring}"
-    #I can use either Postman (PUT request) or run the curl command: "curl -X PUT -d "{\"destination\":\"Sallygap\", \"route_map\":\"some map\",\"distance\":110,,\"elevation\":800}" http://127.0.0.1:5000/routes/1" to test this endpoint "/routes/id"
+    #return f"update {id} {jsonstring}" # to be used for testing in production
+    #I can use either Postman (PUT request) or run the curl command: "curl -X PUT -d "{\"destination\":\"Sallygap\", \"route_map\":\"some map\",\"distance\":60,,\"elevation\":800}" http://127.0.0.1:5000/routes/1" to test this endpoint "/routes/id"
 
     return jsonify(routeDAO.update_route(id, route))
 
-    # To delete a record from the server
-@app.route("/routes/<int:id>", methods=["DELETE"]) #I'm mapping the URL "/routes/<int:id>" to the function delete_route() 
-    #and specifying that it should only respond to DELETE requests. The <int:id> part of the URL is a variable that will be passed to the function as an argument. 
-    # When a client sends a DELETE request to "/routes/1", for example, the delete_route() function will be called with route_id set to 1. 
+
+    # To delete a record from the database, map the URL "/routes/<int:id>" to the function delete_route() and specify that it should only respond to DELETE requests
+@app.route("/routes/<int:id>", methods=["DELETE"]) 
+    
 def delete_route(id):
-     
-    #return "delete"
+    #return "delete" # to be used for testing in production
     # I can use either Postman (DELETE request) or run the curl command: "curl -X DELETE http://127.0.0.1:5000/routes/1" to test this endpoint "/routes/id"
 
     return jsonify(routeDAO.delete_route(id)) 
 
-
-@app.route("/invalid", methods=["GET"]) # I'm mapping the URL "/invalid" to the function revert_to_index() and specifying that it should only respond to GET requests. 
-    # When a client sends a GET request to "/invalid", the revert_to_index() function will be called. 
-    # In this example, the function uses redirect() and url_for() to redirect the user to the index (home) page when they access the /invalid endpoint. 
-    # The url_for("index") function generates the URL for the index() function, which is mapped to the root URL ("/"). So when a user accesses "/invalid", they will be redirected to "/".
+    # I want a function to map the URL "/invalid" to the function revert_to_index(), if the user accesses the /invalid endpoint 
+@app.route("/invalid", methods=["GET"]) 
+    
 def revert_to_index():
-    return redirect(url_for("index")) # this will redirect the user to the index (home) page when they access the /invalid endpoint
+    return redirect(url_for("index")) 
 
-
+    # similar to invalid above, except This is a custom error handler for 404 errors (page not found), it redirect the user back to the index page
 @app.errorhandler(404)
-    # This is a custom error handler for 404 errors (page not found). When a user tries to access a URL that does not exist on the server, this function will be called. 
-    # It will redirect the user back to the index page instead of showing a 404 error message
+
 def page_not_found(e):
-    # This captures any invalid URL and sends the user back to the index
+   
     return redirect(url_for("index"))
 
 
