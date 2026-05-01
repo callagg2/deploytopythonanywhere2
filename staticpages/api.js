@@ -7,7 +7,7 @@ function getAllRoutes() {
   fetch(url)
     .then(response => response.json())
     .then(data => _displayRoutes(data))
-    .catch(error => console.error("Unable to get routes.", error));
+    .catch(error => console.error("Unable to get all routes.", error));
 }
 
 
