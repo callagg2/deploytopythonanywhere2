@@ -4,8 +4,8 @@
 
 import mysql.connector
 import urllib.parse # this might be needed to parse the route URL 
-#from testing_dbconfig import config_details
-from dbconfig_pythonanywhere import config_details
+from testing_dbconfig import config_details
+#from dbconfig_pythonanywhere import config_details
 
 
 class RouteDAO: 
